@@ -22,6 +22,8 @@ SERV = server
 # The name of the client.
 CLIE = client
 
+PRINT = ./ft_printf/libftprintf.a
+
 # Does everything that is needed for this project.
 all: $(SERV) $(CLIE)
 
@@ -34,15 +36,15 @@ nor:
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 # Does whatever is needed to create the server executable.
-$(SERV): print $(S_OBJS)
+$(SERV): $(PRINT) $(S_OBJS)
 	$(CC) $(LDFLAGS) -o $(SERV) $(S_OBJS)
 
 # Calls the makefile of the ft_printf.
-print:
+$(PRINT):
 	make -C ./ft_printf all
 
 # Does whatever is needed to create the client executable.
-$(CLIE): print $(C_OBJS)
+$(CLIE): $(PRINT) $(C_OBJS)
 	$(CC) $(LDFLAGS) -o $(CLIE) $(C_OBJS)
 
 # Removes all temporary files.
@@ -52,9 +54,10 @@ clean:
 
 # Removes all files created by this makefile.
 fclean: clean
+	- $(RM) $(SERV) $(CLIE)
 
 # Cleans and recompiles the project.
 re: fclean all
 
 # A list of the rules that are always dirty.
-.PHONY: all clean fclean re nor print
+.PHONY: all clean fclean re nor
