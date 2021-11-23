@@ -25,6 +25,10 @@ CLIE = client
 # Does everything that is needed for this project.
 all: $(SERV) $(CLIE)
 
+# Runs the norm checker on every registered file.
+nor:
+	norminette $(C_SRCS) $(S_SRCS) $(patsubst %.c,%.h,$(S_SRCS)) $(patsubst %.c,%.h,$(S_SRCS)) | grep :
+
 # Compiles each file individually.
 %.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $<
@@ -49,4 +53,4 @@ fclean: clean
 re: fclean all
 
 # A list of the rules that are always dirty.
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re nor
