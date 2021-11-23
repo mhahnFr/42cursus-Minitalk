@@ -25,8 +25,17 @@ CLIE = client
 # Does everything that is needed for this project.
 all: $(SERV) $(CLIE)
 
+# Compiles each file individually.
+%.o: %.c
+	$(CC) $(CFLAGS) -c -o $@ $<
+
 # Does whatever is needed to create the server executable.
 $(SERV): $(S_OBJS)
+	$(CC) $(LDFLAGS) -o $(SERV) $(S_OBJS)
+
+# Does whatever is needed to create the client executable.
+$(CLIE): $(C_OBJS)
+	$(CC) $(LDFLAGS) -o $(CLIE) $(C_OBJS)
 
 # Removes all temporary files.
 clean:
