@@ -1,8 +1,8 @@
 # The source files for the client.
-C_SRCS =
+C_SRCS = ./client_files/main.c
 
 # The source files for the server.
-S_SRCS = 
+S_SRCS = ./server_files/main.c
 
 # The object files of the server.
 S_OBJS = $(patsubst %.c,%.o,$(S_SRCS))
@@ -11,10 +11,10 @@ S_OBJS = $(patsubst %.c,%.o,$(S_SRCS))
 C_OBJS = $(patsubst %.c,%.o,$(C_SRCS))
 
 # The flags to use during the compilation.
-CFLAGS = -Wall -Werror -Wextra -g
+CFLAGS = -Wall -Werror -Wextra -g -I. -I./ft_printf
 
-# The flags to use during linking.
-LDFLAGS = 
+# The flags used during linking.
+LDFLAGS = -L./ft_printf -lftprintf
 
 # The name of the server.
 SERV = server
@@ -34,11 +34,15 @@ nor:
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 # Does whatever is needed to create the server executable.
-$(SERV): $(S_OBJS)
+$(SERV): print $(S_OBJS)
 	$(CC) $(LDFLAGS) -o $(SERV) $(S_OBJS)
 
+# Calls the makefile of the ft_printf.
+print:
+	make -C ./ft_printf all
+
 # Does whatever is needed to create the client executable.
-$(CLIE): $(C_OBJS)
+$(CLIE): print $(C_OBJS)
 	$(CC) $(LDFLAGS) -o $(CLIE) $(C_OBJS)
 
 # Removes all temporary files.
@@ -53,4 +57,4 @@ fclean: clean
 re: fclean all
 
 # A list of the rules that are always dirty.
-.PHONY: all clean fclean re nor
+.PHONY: all clean fclean re nor print
