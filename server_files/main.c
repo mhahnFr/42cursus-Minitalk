@@ -52,8 +52,6 @@ int	main(void)
 	sa.sa_sigaction = first_responder;
 	sigaction(SIGUSR1, &sa, NULL);
 	signal(SIGUSR2, receive_one);
-	signal(SIGKILL, print_it);
-	signal(SIGTERM, print_it);
 	while (1)
 		pause();
 	return (0);
