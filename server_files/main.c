@@ -34,11 +34,6 @@ void	receive_one(void)
 	kill(g_other_pid, SIGUSR1);
 }
 
-void	print_it(void)
-{
-	exit(0);
-}
-
 void	first_responder(int sig, siginfo_t *i, void *context)
 {
 	g_other_pid = i->si_pid;
