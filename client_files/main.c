@@ -4,45 +4,46 @@
 
 #include "ft_printf.h"
 
-int		g_pid;
 char	*g_string;
 
-void	receive_answer(void)
+void	receive_answer(int sig, siginfo_t *info, void *context)
 {
 	static size_t	i = 0;
 	static int		bi = 7;
 
+	sig = 0;
+	context = NULL;
 	if (bi == -1)
 	{
 		bi = 7;
 		i++;
 	}
 	if (g_string[i] == '\0')
-		return ;
+		exit(0);
 	if (((g_string[i] >> bi--) & 1) != 1)
-		kill(g_pid, SIGUSR1);
+		kill(info->si_pid, SIGUSR1);
 	else
-		kill(g_pid, SIGUSR2);
-}
-
-void	k(void)
-{
-	kill(g_pid, SIGTERM);
-	exit(0);
+		kill(info->si_pid, SIGUSR2);
 }
 
 int	main(int argv, char **argc)
 {
-	if (argv <= 2)
+	struct sigaction	sa;
+	siginfo_t			info;
+	int					pid;
+
+	if (argv != 3)
 	{
-		ft_printf("Usage: %s <PID> <data...>\n", *argc);
+		ft_printf("Usage: %s <PID> <data>\n", *argc);
 		return (1);
 	}
-	g_pid = atoi(argc[1]);
-	signal(SIGUSR1, receive_answer);
-	signal(SIGINT, k);
+	pid = atoi(argc[1]);
+	sa.sa_flags = SA_SIGINFO;
+	sa.sa_sigaction = receive_answer;
+	sigaction(SIGUSR1, &sa, NULL);
 	g_string = argc[2];
-	kill(pid, SIGUSR1);
+	info.si_pid = pid;
+	receive_answer(0, &info, NULL);
 	while (1)
 		pause();
 	return (0);
