@@ -4,49 +4,46 @@
 
 #include "ft_printf.h"
 
-int	pid;
+int		g_pid;
+char	*g_string;
 
-void	send_message(int pid, char *mesg)
+void	receive_answer(void)
 {
-	ft_printf("%d %s\n", pid, mesg);
-}
+	static size_t	i = 0;
+	static int		bi = 7;
 
-void	send_pid(int pid, int data)
-{
-	for (size_t i = 0; i < 32; i++) {
-		if (((data >> i) & 0xFF) == 0)
-			kill(pid, SIGUSR1);
-		else
-			kill(pid, SIGUSR2);
-		usleep(50);
+	if (bi == -1)
+	{
+		bi = 7;
+		i++;
 	}
+	if (g_string[i] == '\0')
+		return ;
+	if (((g_string[i] >> bi--) & 1) != 1)
+		kill(g_pid, SIGUSR1);
+	else
+		kill(g_pid, SIGUSR2);
 }
 
-void	receive_answer()
+void	k(void)
 {
-	kill(pid, SIGUSR2);
+	kill(g_pid, SIGTERM);
+	exit(0);
 }
 
 int	main(int argv, char **argc)
 {
-	int	i;
-
 	if (argv <= 2)
 	{
 		ft_printf("Usage: %s <PID> <data...>\n", *argc);
 		return (1);
 	}
-	pid = atoi(argc[1]);
-	// send pid
-	// once server got it, he will send a signal
-	// send a bit, send the next bit once signal from server received.
+	g_pid = atoi(argc[1]);
 	signal(SIGUSR1, receive_answer);
-	send_pid(pid, getpid());
-	i = 0;
-	while (i < argv - 1)
-	{
-		send_message(pid, argc[i]);
-		i++;
-	}
+	signal(SIGINT, k);
+	g_string = argc[2];
+	kill(pid, SIGUSR1);
+	while (1)
+		pause();
 	return (0);
 }
