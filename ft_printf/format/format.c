@@ -45,7 +45,7 @@ t_format	*format_new(void)
 	return (format);
 }
 
-void		format_delete(t_format *f)
+void	format_delete(t_format *f)
 {
 	free(f);
 }
