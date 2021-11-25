@@ -6,7 +6,7 @@ string from the client to the server, using only UNIX signals.
 ## Approach
 My approach is pretty straight forward: once the server received a signal, the
 associated bit is stored and a signal is sent back to the client. The signal
-handler of the client sends then the next bit of the input string.
+handler of the client then sends the next bit of the input string.
 
 ### Final notes
 This repository showcases my solutions of this exercise.
