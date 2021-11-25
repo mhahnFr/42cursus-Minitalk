@@ -11,7 +11,7 @@ S_OBJS = $(patsubst %.c,%.o,$(S_SRCS))
 C_OBJS = $(patsubst %.c,%.o,$(C_SRCS))
 
 # The flags to use during the compilation.
-CFLAGS = -Wall -Werror -Wextra -I./ft_printf
+CFLAGS = -Wall -Werror -Wextra -I./server_files -I./ft_printf
 
 # The flags used during linking.
 LDFLAGS = -L./ft_printf -lftprintf
@@ -49,7 +49,7 @@ $(CLIE): $(PRINT) $(C_OBJS)
 
 # Removes all temporary files.
 clean:
-	- $(RM) $(OBJS) *~
+	- $(RM) $(S_OBJS) $(C_OBJS) *~
 	- find . -name *~ -print -delete
 
 # Removes all files created by this makefile.
