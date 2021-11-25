@@ -5,8 +5,12 @@
 
 #include "ft_printf.h"
 
-size_t	g_bits;
-char	g_c;
+#include "main.h"
+
+struct s_char_bits	g_ship = {
+	.bits = 0,
+	.c = 0
+};
 
 void	check_pid(int pid)
 {
@@ -14,7 +18,7 @@ void	check_pid(int pid)
 
 	if (s_pid != pid)
 	{
-		g_bits = 0;
+		g_ship.bits = 0;
 		s_pid = pid;
 		ft_printf("\n\nIncoming message from %d:\n", pid);
 	}
@@ -25,12 +29,12 @@ void	receive_zero(int sig, siginfo_t *info, void *context)
 	check_pid(info->si_pid);
 	sig = 0;
 	context = NULL;
-	g_c <<= 1;
-	g_bits++;
-	if (g_bits == 8)
+	g_ship.c <<= 1;
+	g_ship.bits++;
+	if (g_ship.bits == 8)
 	{
-		g_bits = 0;
-		write(1, &g_c, 1);
+		g_ship.bits = 0;
+		write(1, &g_ship.c, 1);
 	}
 	kill(info->si_pid, SIGUSR1);
 }
@@ -40,13 +44,13 @@ void	receive_one(int sig, siginfo_t *info, void *context)
 	check_pid(info->si_pid);
 	context = NULL;
 	sig = 0;
-	g_c <<= 1;
-	g_c ^= 1;
-	g_bits++;
-	if (g_bits == 8)
+	g_ship.c <<= 1;
+	g_ship.c ^= 1;
+	g_ship.bits++;
+	if (g_ship.bits == 8)
 	{
-		g_bits = 0;
-		write(1, &g_c, 1);
+		g_ship.bits = 0;
+		write(1, &g_ship.c, 1);
 	}
 	kill(info->si_pid, SIGUSR1);
 }
