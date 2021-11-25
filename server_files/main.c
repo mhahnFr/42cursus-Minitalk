@@ -7,11 +7,19 @@
 
 #include "main.h"
 
+/*
+ * The ship which contains the count of the bits that have been received since
+ * the last complete byte, as well as the character itself.
+ */
 struct s_char_bits	g_ship = {
 	.bits = 0,
 	.c = 0
 };
 
+/*
+ * Checks wether the caller's process identifier has changed. If that is the
+ * case, a message indicating the new connection is printed.
+ */
 void	check_pid(int pid)
 {
 	static int	s_pid = -1;
@@ -24,6 +32,12 @@ void	check_pid(int pid)
 	}
 }
 
+/*
+ * The handler for SIGUSR1. Upon reception of this signal, the bits of the
+ * character are shifted by one. If the signal is the eighth, the character is
+ * printed and the bit count is reset to zero. Once everything is finished, a
+ * SIGUSR1 is sent back to the sender.
+ */
 void	receive_zero(int sig, siginfo_t *info, void *context)
 {
 	check_pid(info->si_pid);
@@ -39,6 +53,12 @@ void	receive_zero(int sig, siginfo_t *info, void *context)
 	kill(info->si_pid, SIGUSR1);
 }
 
+/*
+ * The handler for SIGUSR2. Upon reception of this signal, the bits of the
+ * character are shifted by one and are flipped. If the signal is the eighth,
+ * the character is printed and the bit count is reset to zero. Once everything
+ * is finished, a SIGUSR1 is sent back to the sender.
+ */
 void	receive_one(int sig, siginfo_t *info, void *context)
 {
 	check_pid(info->si_pid);

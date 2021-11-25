@@ -4,8 +4,16 @@
 
 #include "ft_printf.h"
 
+/*
+ * The string that should be sent.
+ */
 char	*g_string;
 
+/*
+ * Once the server has received a signal, he will send a SIGUSR1. This function
+ * is the appopriate signal handler, once it is called, it will send the next
+ * bit to the server. After the last character has been sent, the client exits.
+ */
 void	receive_answer(int sig, siginfo_t *info, void *context)
 {
 	static size_t	i = 0;
