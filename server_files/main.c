@@ -37,6 +37,7 @@ void	receive_zero(int sig, siginfo_t *info, void *context)
 
 void	receive_one(int sig, siginfo_t *info, void *context)
 {
+	check_pid(info->si_pid);
 	context = NULL;
 	sig = 0;
 	g_c <<= 1;
