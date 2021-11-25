@@ -10,9 +10,12 @@ void	receive_answer(int sig, siginfo_t *info, void *context)
 {
 	static size_t	i = 0;
 	static int		bi = 7;
+	static int		s_pid = -1;
 
 	sig = 0;
 	context = NULL;
+	if (s_pid != info->si_pid && s_pid == -1)
+		s_pid = info->si_pid;
 	if (bi == -1)
 	{
 		bi = 7;
@@ -21,9 +24,9 @@ void	receive_answer(int sig, siginfo_t *info, void *context)
 	if (g_string[i] == '\0')
 		exit(0);
 	if (((g_string[i] >> bi--) & 1) != 1)
-		kill(info->si_pid, SIGUSR1);
+		kill(s_pid, SIGUSR1);
 	else
-		kill(info->si_pid, SIGUSR2);
+		kill(s_pid, SIGUSR2);
 }
 
 int	main(int argv, char **argc)

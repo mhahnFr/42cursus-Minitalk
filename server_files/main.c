@@ -8,8 +8,21 @@
 size_t	g_bits;
 char	g_c;
 
+void	check_pid(int pid)
+{
+	static int	s_pid = -1;
+
+	if (s_pid != pid)
+	{
+		g_bits = 0;
+		s_pid = pid;
+		ft_printf("\n\nIncoming message from %d:\n", pid);
+	}
+}
+
 void	receive_zero(int sig, siginfo_t *info, void *context)
 {
+	check_pid(info->si_pid);
 	sig = 0;
 	context = NULL;
 	g_c <<= 1;
