@@ -12,3 +12,5 @@ handler of the client sends then the next bit of the input string.
 This repository showcases my solutions of this exercise.
 
 © 2021 [mhahnFr](https://www.github.com/mhahnFr)
+
+[42 school]: https://www.42heilbronn.de/learncoderepeat
