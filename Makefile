@@ -10,11 +10,14 @@ S_OBJS = $(patsubst %.c,%.o,$(S_SRCS))
 # The object files of the client.
 C_OBJS = $(patsubst %.c,%.o,$(C_SRCS))
 
+# The libft library file.
+LIB = ./libft/src/libft.a
+
 # The flags to use during the compilation.
-CFLAGS = -Wall -Werror -Wextra -I./server_files -I./ft_printf
+CFLAGS = -Wall -Werror -Wextra -I./server_files -I./ft_printf -I./libft/src
 
 # The flags used during linking.
-LDFLAGS = -L./ft_printf -lftprintf
+LDFLAGS = -L./ft_printf -lftprintf -L./libft/src -lft
 
 # The name of the server.
 SERV = server
@@ -22,6 +25,7 @@ SERV = server
 # The name of the client.
 CLIE = client
 
+# The ft_printf library file.
 PRINT = ./ft_printf/libftprintf.a
 
 # Does everything that is needed for this project.
@@ -36,12 +40,16 @@ nor:
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 # Does whatever is needed to create the server executable.
-$(SERV): $(PRINT) $(S_OBJS)
+$(SERV): $(PRINT) $(LIB) $(S_OBJS)
 	$(CC) $(LDFLAGS) -o $(SERV) $(S_OBJS)
 
 # Calls the makefile of the ft_printf.
 $(PRINT):
 	make -C ./ft_printf all
+
+# Calls the makefile of the libft.
+$(LIB):
+	make -C ./libft/src all
 
 # Does whatever is needed to create the client executable.
 $(CLIE): $(PRINT) $(C_OBJS)
@@ -49,11 +57,15 @@ $(CLIE): $(PRINT) $(C_OBJS)
 
 # Removes all temporary files.
 clean:
+	- make -C ./ft_printf clean
+	- make -C ./libft/src clean
 	- $(RM) $(S_OBJS) $(C_OBJS) *~
 	- find . -name *~ -print -delete
 
 # Removes all files created by this makefile.
 fclean: clean
+	make -C ./ft_printf fclean
+	make -C ./libft/src fclean
 	- $(RM) $(SERV) $(CLIE)
 
 # Cleans and recompiles the project.
