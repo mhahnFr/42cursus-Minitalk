@@ -2,6 +2,7 @@
 #include <signal.h>
 #include <stdlib.h>
 
+#include "libft.h"
 #include "ft_printf.h"
 
 /*
@@ -49,7 +50,7 @@ int	main(int argv, char **argc)
 		ft_printf("Usage: %s <PID> <data>\n", *argc);
 		return (1);
 	}
-	pid = atoi(argc[1]);
+	pid = ft_atoi(argc[1]);
 	sa.sa_flags = SA_SIGINFO;
 	sa.sa_sigaction = receive_answer;
 	sigaction(SIGUSR1, &sa, NULL);
