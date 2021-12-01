@@ -41,7 +41,7 @@ nor:
 
 # Does whatever is needed to create the server executable.
 $(SERV): $(PRINT) $(LIB) $(S_OBJS)
-	$(CC) $(LDFLAGS) -o $(SERV) $(S_OBJS)
+	$(CC) $(S_OBJS) $(LDFLAGS) -o $(SERV)
 
 # Calls the makefile of the ft_printf.
 $(PRINT):
