@@ -40,7 +40,11 @@ void	check_pid(int pid)
  */
 void	receive_zero(int sig, siginfo_t *info, void *context)
 {
-	check_pid(info->si_pid);
+	static int	s_pid;
+
+	if (info->si_pid != 0)
+		s_pid = info->si_pid;
+	check_pid(s_pid);
 	sig = 0;
 	context = NULL;
 	g_ship.c <<= 1;
@@ -50,7 +54,7 @@ void	receive_zero(int sig, siginfo_t *info, void *context)
 		g_ship.bits = 0;
 		write(1, &g_ship.c, 1);
 	}
-	kill(info->si_pid, SIGUSR1);
+	kill(s_pid, SIGUSR1);
 }
 
 /*
@@ -61,7 +65,11 @@ void	receive_zero(int sig, siginfo_t *info, void *context)
  */
 void	receive_one(int sig, siginfo_t *info, void *context)
 {
-	check_pid(info->si_pid);
+	static int	s_pid;
+
+	if (info->si_pid != 0)
+		s_pid = info->si_pid;
+	check_pid(s_pid);
 	context = NULL;
 	sig = 0;
 	g_ship.c <<= 1;
@@ -72,7 +80,7 @@ void	receive_one(int sig, siginfo_t *info, void *context)
 		g_ship.bits = 0;
 		write(1, &g_ship.c, 1);
 	}
-	kill(info->si_pid, SIGUSR1);
+	kill(s_pid, SIGUSR1);
 }
 
 int	main(void)

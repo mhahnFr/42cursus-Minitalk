@@ -30,7 +30,6 @@ void	receive_answer(int sig, siginfo_t *info, void *context)
 		bi = 7;
 		i++;
 	}
-	usleep(10);
 	if (g_string[i] == '\0')
 		exit(0);
 	if (((g_string[i] >> bi--) & 1) != 1)
