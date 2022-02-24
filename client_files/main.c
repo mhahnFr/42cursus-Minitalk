@@ -21,8 +21,8 @@ void	receive_answer(int sig, siginfo_t *info, void *context)
 	static int		bi = 7;
 	static int		s_pid = -1;
 
-	sig = 0;
-	context = NULL;
+	(void) context;
+	(void) sig;
 	if (s_pid != info->si_pid && s_pid == -1)
 		s_pid = info->si_pid;
 	if (bi == -1)

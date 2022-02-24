@@ -53,7 +53,7 @@ $(LIB):
 
 # Does whatever is needed to create the client executable.
 $(CLIE): $(PRINT) $(C_OBJS)
-	$(CC) $(LDFLAGS) -o $(CLIE) $(C_OBJS)
+	$(CC) $(C_OBJS) $(LDFLAGS) -o $(CLIE)
 
 # Removes all temporary files.
 clean:
