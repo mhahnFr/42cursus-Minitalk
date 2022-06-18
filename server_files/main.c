@@ -45,8 +45,8 @@ void	receive_zero(int sig, siginfo_t *info, void *context)
 	if (info->si_pid != 0)
 		s_pid = info->si_pid;
 	check_pid(s_pid);
-	sig = 0;
-	context = NULL;
+	(void) context;
+	(void) sig;
 	g_ship.c <<= 1;
 	g_ship.bits++;
 	if (g_ship.bits == 8)
@@ -70,8 +70,8 @@ void	receive_one(int sig, siginfo_t *info, void *context)
 	if (info->si_pid != 0)
 		s_pid = info->si_pid;
 	check_pid(s_pid);
-	context = NULL;
-	sig = 0;
+	(void) context;
+	(void) sig;
 	g_ship.c <<= 1;
 	g_ship.c ^= 1;
 	g_ship.bits++;
